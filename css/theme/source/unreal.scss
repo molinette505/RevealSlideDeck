@@ -1,0 +1,162 @@
+/**
+ * Unreal Engine Theme for Reveal.js
+ * Designed for "Interactivité en jeu" course notes.
+ *
+ * Features:
+ * - UE5 Dark Mode Palette
+ * - Blueprint Node styling classes
+ * - Conditional "Event Graph" grid background
+ */
+
+// Default mixins and settings -----------------
+@use "sass:color";
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+
+// 1. Fonts
+// Robot and Roboto Mono give that "Game Editor" interface look
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:400,700');
+
+
+// 2. Global Color Variables (UE5 Palette)
+$ue-bg-dark: #151515;       // Main background (Graph BG)
+$ue-panel-gray: #202020;    // Panels / Node Backgrounds
+$ue-blue: #4a90e2;          // Blueprint Nodes / Selection
+$ue-orange: #f5a623;        // Warnings
+$ue-green: #7bae43;         // Success / Pure Functions
+$ue-red: #d93f3f;           // Events
+$ue-text-main: #d0d0d0;     // Standard Editor Text
+$ue-text-bright: #ffffff;   // Headings
+
+
+// 3. Override Theme Settings
+$backgroundColor: $ue-bg-dark;
+
+$mainColor: $ue-text-main;
+$headingColor: $ue-text-bright;
+
+// Smaller font size (30px) to fit more technical info on slides
+$mainFontSize: 30px; 
+$mainFont: 'Roboto', 'Segoe UI', Helvetica, sans-serif;
+$headingFont: 'Roboto', 'Segoe UI', Helvetica, sans-serif;
+
+$headingTextShadow: none;
+$headingLetterSpacing: 0.5px;
+$headingTextTransform: uppercase;
+$headingFontWeight: 700;
+
+$linkColor: $ue-blue;
+$linkColorHover: color.scale($linkColor, $lightness: 15%);
+$selectionBackgroundColor: rgba($ue-blue, 0.4);
+
+// Compact Heading Sizes
+$heading1Size: 2.2em;
+$heading2Size: 1.5em;
+$heading3Size: 1.2em;
+$heading4Size: 1.0em;
+
+// Change text colors against light slide backgrounds
+@include light-bg-text-color(#222);
+
+
+// 4. Background & Grid Logic
+
+// Default background (Flat Dark Grey)
+body {
+    background-color: $backgroundColor;
+}
+
+// Conditional Grid Background
+// Enable this by adding data-state="ue-grid" to your <section> tag
+.ue-grid body, .ue-grid .reveal-viewport {
+    background-color: $backgroundColor;
+    
+    background-image: 
+        // Major Grid (Brighter, 100px)
+        linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        
+        // Minor Grid (Fainter, 20px)
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-position: -1px -1px;
+}
+
+
+// 5. Custom Unreal/Game Design Classes
+
+.reveal {
+
+  // A box resembling a Blueprint Node
+  .blueprint-node {
+    background-color: rgba(30, 30, 30, 0.95); // High opacity to pop against grid
+    border: 1px solid #333;
+    border-top: 4px solid $ue-blue; // Default blue, override inline for Red events
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6); // Deep shadow for depth
+    text-align: left;
+    
+    // Ensure headings inside nodes respect the border color concept
+    h3, h4 {
+      color: inherit; // Will inherit color set on the node or default to main
+      margin-top: 0;
+      font-size: 1.2em;
+    }
+  }
+
+.ue-embed-responsive {
+    width: 100%;                // Force it to fill the parent width
+    aspect-ratio: 16 / 9;       // Keep a nice cinematic shape (or use 4/3 or 1/1)
+    border: none;               // Clean look
+    background-color: #000;     // Placeholder background while loading
+    display: block;             // Removes tiny inline spacing gaps
+    flex-grow: 1;               // Allows it to expand if the parent has extra height
+}
+
+  // A box for warnings or "Important Notes"
+  .warning-box {
+    background-color: rgba(60, 40, 0, 0.3);
+    border-left: 4px solid $ue-orange;
+    padding: 15px;
+    margin: 15px 0;
+    font-size: 0.9em;
+    color: lighten($ue-orange, 10%);
+    text-align: left;
+  }
+
+  // Text utility: Small text for dense slides / footers
+  .text-small {
+    font-size: 0.7em;
+    line-height: 1.4;
+    color: darken($ue-text-main, 10%);
+  }
+
+  // Text utility: Monospace for code references in normal text
+  .code-ref {
+    font-family: 'Roboto Mono', monospace;
+    color: $ue-green;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+
+  // Styles for <code> blocks to look like the Output Log
+  pre code {
+    background: #0b0b0b;
+    border: 1px solid #333;
+    font-family: 'Roboto Mono', monospace;
+  }
+}
+
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
